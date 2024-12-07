@@ -1,10 +1,9 @@
 import React from 'react'
-import ExpenseCard from './ExpenseCard'
 
-const ExpenseTable = ({ expenses, onDeleteExpense, onEditExpense, isTable }) => {
+const ExpenseTable = ({ expenses, onDeleteExpense, onEditExpense }) => {
   return (
     <>
-    {isTable ? (
+   
     <table className="min-w-full bg-white shadow-xl rounded-lg overflow-hidden">
       <thead className="bg-gray-200 text-gray-700 text-sm uppercase">
         <tr>
@@ -55,10 +54,7 @@ const ExpenseTable = ({ expenses, onDeleteExpense, onEditExpense, isTable }) => 
         ))}
       </tbody>
     </table>
-  )
-    : (
-        <ExpenseCard expenses={expenses} onDeleteExpense={onDeleteExpense} onEditExpense={onEditExpense}/>
-    )}
+ 
     </>
   )
 }
