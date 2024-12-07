@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
-import { DateInput, AmountInput, TitleInput, CategoryInput, PaymentModeInput, RecurringInput, BeneficiaryInput, TagsInput } from './Inputs';
-import { getExpenses } from '../service/localStorage';
+import {
+  DateInput,
+  AmountInput,
+  TitleInput,
+  CategoryInput,
+  PaymentModeInput,
+  RecurringInput,
+  BeneficiaryInput,
+  TagsInput,
+} from './Inputs';
+import { useExpenseContext } from '../context/ExpenseContext';
 
 const emptyForm = () => ({
   date: new Date().toISOString().split('T')[0],
@@ -14,19 +23,21 @@ const emptyForm = () => ({
   tags: '',
 });
 
-function formValuesFromLocalStorage(ind) {
-  const expenses = getExpenses();
+function formValuesFromLocalStorage(ind, storage) {
+  const expenses = storage;
   const expense = expenses[ind];
   const formValues = {
     ...expense,
-    newCategory: '',  // TODO: fix later
+    newCategory: '',
     tags: expense.tags?.join ? expense.tags.join(',') : expense.tags,
   };
   return formValues;
 }
 
-const ExpenseForm = ({ onSaveExpense, editIndex }) => {
-  const prefilledForm = editIndex > -1 ? formValuesFromLocalStorage(editIndex) : emptyForm();
+const ExpenseForm = ({ onSaveExpense }) => {
+  const { expense, editIndex } = useExpenseContext();
+  const prefilledForm =
+    editIndex > -1 ? formValuesFromLocalStorage(editIndex, expense) : emptyForm();
   const [formValues, setFormValues] = useState(prefilledForm);
 
   const handleSubmit = (e) => {
@@ -42,29 +53,39 @@ const ExpenseForm = ({ onSaveExpense, editIndex }) => {
     setFormValues(emptyForm());
   };
 
-  const [date, setDate] = [formValues.date, (val) => setFormValues((state) => ({...state, date: val}))]
-  const [amount, setAmount] = [formValues.amount, (val) => setFormValues((state) => ({...state, amount: val}))]
-  const [title, setTitle] = [formValues.title, (val) => setFormValues((state) => ({...state, title: val}))]
-  const [category, setCategory] = [formValues.category, (val) => setFormValues((state) => ({...state, category: val}))]
-  const [newCategory, setNewCategory] = [formValues.newCategory, (val) => setFormValues((state) => ({...state, newCategory: val}))]
-  const [paymentMode, setPaymentMode] = [formValues.paymentMode, (val) => setFormValues((state) => ({...state, paymentMode: val}))]
-  const [recurring, setRecurring] = [formValues.recurring, (val) => setFormValues((state) => ({...state, recurring: val}))]
-  const [beneficiary, setBeneficiary] = [formValues.beneficiary, (val) => setFormValues((state) => ({...state, beneficiary: val}))]
-  const [tags, setTags] = [formValues.tags, (val) => setFormValues((state) => ({...state, tags: val}))]
+  const [date, setDate] = [formValues.date, (val) => setFormValues((state) => ({ ...state, date: val }))];
+  const [amount, setAmount] = [formValues.amount, (val) => setFormValues((state) => ({ ...state, amount: val }))];
+  const [title, setTitle] = [formValues.title, (val) => setFormValues((state) => ({ ...state, title: val }))];
+  const [category, setCategory] = [formValues.category, (val) => setFormValues((state) => ({ ...state, category: val }))];
+  const [newCategory, setNewCategory] = [formValues.newCategory, (val) => setFormValues((state) => ({ ...state, newCategory: val }))];
+  const [paymentMode, setPaymentMode] = [formValues.paymentMode, (val) => setFormValues((state) => ({ ...state, paymentMode: val }))];
+  const [recurring, setRecurring] = [formValues.recurring, (val) => setFormValues((state) => ({ ...state, recurring: val }))];
+  const [beneficiary, setBeneficiary] = [formValues.beneficiary, (val) => setFormValues((state) => ({ ...state, beneficiary: val }))];
+  const [tags, setTags] = [formValues.tags, (val) => setFormValues((state) => ({ ...state, tags: val }))];
 
-  const submitButtonText = editIndex > -1 ? "Edit Expense" : "Add Expense";
+  const submitButtonText = editIndex > -1 ? 'Edit Expense' : 'Add Expense';
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="space-y-6 p-6 bg-white rounded-lg shadow-lg">
       <DateInput value={date} onChange={setDate} />
       <AmountInput value={amount} onChange={setAmount} />
       <TitleInput value={title} onChange={setTitle} />
-      <CategoryInput selectedCategory={category} onChange={setCategory} newCategory={newCategory} onNewCategoryChange={setNewCategory} />
+      <CategoryInput
+        selectedCategory={category}
+        onChange={setCategory}
+        newCategory={newCategory}
+        onNewCategoryChange={setNewCategory}
+      />
       <PaymentModeInput selectedMode={paymentMode} onChange={setPaymentMode} />
       <RecurringInput value={recurring} onChange={setRecurring} />
       <BeneficiaryInput selectedBeneficiary={beneficiary} onChange={setBeneficiary} />
       <TagsInput value={tags} onChange={setTags} />
-      <button type="submit">{submitButtonText}</button>
+      <button
+        type="submit"
+        className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+      >
+        {submitButtonText}
+      </button>
     </form>
   );
 };

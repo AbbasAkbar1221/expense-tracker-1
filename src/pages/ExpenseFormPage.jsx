@@ -1,28 +1,37 @@
 import React from 'react';
 import ExpenseForm from '../components/ExpenseForm';
 import { useNavigate } from 'react-router-dom';
-import { getExpenses, setExpenses } from '../service/localStorage';
+import { useExpenseContext } from '../context/ExpenseContext';
 
-const ExpenseFormPage = ({ editIndex, setEditIndex }) => {
+const ExpenseFormPage = () => {
+    const { expense, dispatch, editIndex, setEditIndex } = useExpenseContext();
     const navigate = useNavigate();
 
     const handleSaveExpense = (expense, ind) => {
-        const expenses = getExpenses();
         if (ind > -1) {
-            expenses[ind] = expense;
+            dispatch({
+                type: "EDIT",
+                payload: {expense, ind}
+            })
         } else {
-            expenses.push(expense);
+            dispatch({
+                type:"ADD",
+                payload:{expense}
+            })
         }
-        setExpenses(expenses);
         setEditIndex(-1);
-        navigate('/expenses')
+        navigate('/expenses');
     };
 
     return (
-        <>
-            <h1>Daily Expense Tracker</h1>
-            <ExpenseForm onSaveExpense={handleSaveExpense} editIndex={editIndex} key={editIndex} />
-        </>
+        <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
+            <h1 className="text-3xl font-bold text-gray-800 mb-6">
+                Daily Expense Tracker
+            </h1>
+            <div className="w-full max-w-md bg-white rounded-lg shadow-md p-6">
+                <ExpenseForm onSaveExpense={handleSaveExpense} key={editIndex} />
+            </div>
+        </div>
     );
 };
 

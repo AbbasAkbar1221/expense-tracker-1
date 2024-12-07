@@ -1,12 +1,15 @@
 const EXPENSES_DATA_KEY = 'expenses_data_key';
+const sleep = ms => new Promise(r => setTimeout(r , ms))
 
-export function getExpenses() {
+export async function getExpensesFromBackend() {
     const expensesDataString = localStorage.getItem(EXPENSES_DATA_KEY) || '[]';
     const expenses = JSON.parse(expensesDataString);
+    await sleep(1000);
     return expenses;
 }
 
-export function setExpenses(expenses) {
+export async function setExpensesInBackend(expenses) {
+    await sleep(1000);
     const updatedExpensesString = JSON.stringify(expenses);
     localStorage.setItem(EXPENSES_DATA_KEY, updatedExpensesString);
 }
