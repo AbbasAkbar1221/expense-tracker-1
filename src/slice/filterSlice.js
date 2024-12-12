@@ -4,6 +4,7 @@ const filterSlice = createSlice({
   name: "filterInSlice",
   initialState: {
     categoryArray: ["All"],
+    reverse: false,
   },
   reducers: {
     setCategory(state, action) {
@@ -21,7 +22,10 @@ const filterSlice = createSlice({
   
         state.categoryArray = updatedCategories.length === 0 ? ["All"] : updatedCategories;
       },
+      reverseExpense: (state, action)=>{
+       state.reverse = !state.reverse
+      }
   },
 });
-export const { setCategory } = filterSlice.actions;
+export const { setCategory, reverseExpense } = filterSlice.actions;
 export default filterSlice.reducer;

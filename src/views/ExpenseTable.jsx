@@ -1,6 +1,7 @@
 import React from 'react'
 
-const ExpenseTable = ({ expenses, onDeleteExpense, onEditExpense }) => {
+const ExpenseTable = ({reverse, expenses, onDeleteExpense, onEditExpense }) => {
+  const viewExpense = reverse? [...expenses].reverse() : expenses
   return (
     <>
    
@@ -19,7 +20,8 @@ const ExpenseTable = ({ expenses, onDeleteExpense, onEditExpense }) => {
         </tr>
       </thead>
       <tbody>
-        {expenses.map((expense, index) => (
+        {/* {expenses.map((expense, index) => ( */}
+        {viewExpense.map((expense, index) => (
           <tr
             key={index}
             className="border-b border-gray-200 hover:bg-gray-100 text-sm"

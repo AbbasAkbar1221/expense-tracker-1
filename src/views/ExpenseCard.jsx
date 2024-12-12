@@ -1,9 +1,11 @@
 import React from 'react'
 
-const ExpenseCard = ({ expenses, onDeleteExpense, onEditExpense}) => {
+const ExpenseCard = ({reverse, expenses, onDeleteExpense, onEditExpense}) => {
+  const viewExpense = reverse? [...expenses].reverse() : expenses
   return (
     <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {expenses.map((expense, index) => (
+          {/* {expenses.map((expense, index) => ( */}
+          {viewExpense.map((expense, index) => (
             <div
               key={index}
               className="p-4 bg-white rounded-lg shadow hover:shadow-lg transition duration-300"

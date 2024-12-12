@@ -1,18 +1,15 @@
 import React, { useState } from "react";
 import ExpenseTable from "../views/ExpenseTable";
 import ExpenseCard from "../views/ExpenseCard";
-// import filterReducer from '../reducer/filterReducer'
-import { setCategory } from '../slice/filterSlice'
+import { reverseExpense, setCategory } from '../slice/filterSlice'
 import { useDispatch, useSelector } from "react-redux";
 
-
-
 const ExpenseList = ({ expenses, onDeleteExpense, onEditExpense }) => {
+  // const [reverse, setReverse] = useState(false)
   const [isTable, setIsTable] = useState("true");
   const selectedCategory = useSelector(state=> state.filter.categoryArray)
   const dispatch = useDispatch()
-  // const [selectedCategory, dispatch] = useReducer(filterReducer, ["All"])
-  // const [selectedCategory, setSelectedCategory] = useState(['All']);
+  const reverse = useSelector((state) => state.filter.reverse)
 
   // Filter expenses based on the selected category
   const filteredExpenses =
@@ -26,12 +23,7 @@ const ExpenseList = ({ expenses, onDeleteExpense, onEditExpense }) => {
     ...new Set(expenses.map((expense) => expense.category)),
   ];
 
-
   const handleCategoryChange = (category)=>{
-    // dispatch({
-    //   type: 'SET_CATEGORY',
-    //   payload: {category, expenses}
-    // })
     dispatch(setCategory({category, expenses}))
   }
 
@@ -71,18 +63,29 @@ const ExpenseList = ({ expenses, onDeleteExpense, onEditExpense }) => {
       >
         Toggle View
       </button>
+      <button
+        onClick={()=> {
+          dispatch(reverseExpense())
+          // setReverse((prev) => !prev)
+        }}
+        className="ml-2 mb-6 py-2 px-4 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300"
+      >
+        {reverse? "Ascending Order" : "Descending Order" }
+      </button>
 
       {isTable ? (
         <ExpenseTable
           expenses={filteredExpenses}
           onDeleteExpense={onDeleteExpense}
           onEditExpense={onEditExpense}
+          reverse={reverse}
         />
       ) : (
         <ExpenseCard
           expenses={filteredExpenses}
           onDeleteExpense={onDeleteExpense}
           onEditExpense={onEditExpense}
+          reverse = {reverse}
         />
       )}
     </>
