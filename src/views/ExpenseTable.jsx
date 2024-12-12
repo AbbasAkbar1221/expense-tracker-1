@@ -38,13 +38,15 @@ const ExpenseTable = ({ expenses, onDeleteExpense, onEditExpense }) => {
             </td>
             <td className="py-3 px-6 flex space-x-2">
               <button
-                onClick={() => onEditExpense(index)}
+                onClick={() => onEditExpense(expense.id)}
+                // onClick={() => onEditExpense(index)}
                 className="py-2 px-4 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               >
                 Edit
               </button>
               <button
-                onClick={() => onDeleteExpense(index)}
+                // onClick={() => onDeleteExpense(index)}
+                onClick={() => onDeleteExpense(expense.id)}
                 className="py-2 px-4 bg-red-600 text-white font-medium rounded hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
               >
                 Delete

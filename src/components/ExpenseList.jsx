@@ -1,39 +1,70 @@
 import React, { useState } from "react";
 import ExpenseTable from "../views/ExpenseTable";
 import ExpenseCard from "../views/ExpenseCard";
+// import filterReducer from '../reducer/filterReducer'
+import { setCategory } from '../slice/filterSlice'
+import { useDispatch, useSelector } from "react-redux";
+
+
 
 const ExpenseList = ({ expenses, onDeleteExpense, onEditExpense }) => {
   const [isTable, setIsTable] = useState("true");
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const selectedCategory = useSelector(state=> state.filter.categoryArray)
+  const dispatch = useDispatch()
+  // const [selectedCategory, dispatch] = useReducer(filterReducer, ["All"])
+  // const [selectedCategory, setSelectedCategory] = useState(['All']);
 
   // Filter expenses based on the selected category
   const filteredExpenses =
-    selectedCategory === "All"
+    selectedCategory.length === 0  || selectedCategory.includes('All')
       ? expenses
-      : expenses.filter((expense) => expense.category === selectedCategory);
+      : expenses.filter((expense) => selectedCategory.includes(expense.category));
 
   // Get unique categories for the filter dropdown
-  const categories = ["All", ...new Set(expenses.map((expense) => expense.category))];
+  const categories = [
+    "All",
+    ...new Set(expenses.map((expense) => expense.category)),
+  ];
+
+
+  const handleCategoryChange = (category)=>{
+    // dispatch({
+    //   type: 'SET_CATEGORY',
+    //   payload: {category, expenses}
+    // })
+    dispatch(setCategory({category, expenses}))
+  }
+
   return (
     <>
-     {/* Filter Dropdown */}
-     <div className="flex items-center justify-between">
-        <label className="text-sm font-medium text-gray-600" htmlFor="category-filter">
+
+      {/* Filter Checkboxes */}
+      <div className="flex flex-wrap items-center justify-between">
+        <label
+          className="text-sm font-medium text-gray-600"
+          htmlFor="category-filter"
+        >
           Filter by Category:
         </label>
-        <select
-          id="category-filter"
-          className="ml-4 py-2 px-4 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-        >
+        <div className="ml-4 flex space-x-4">
           {categories.map((category, index) => (
-            <option key={index} value={category}>
-              {category}
-            </option>
+            <div key={index} className="flex items-center">
+              <input
+                type="checkbox"
+                id={`category-${category}`}
+                value={category}
+                checked={selectedCategory.includes(category)} // Check if category is selected
+                onChange={(e) => handleCategoryChange(e.target.value)} // Handle category change
+                className="mr-2"
+              />
+              <label htmlFor={`category-${category}`} className="text-sm">
+                {category}
+              </label>
+            </div>
           ))}
-        </select>
+        </div>
       </div>
+
       <button
         onClick={() => setIsTable((prev) => !prev)}
         className="mb-6 py-2 px-4 bg-blue-600 text-white font-medium rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-300"

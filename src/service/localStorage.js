@@ -1,4 +1,4 @@
-const EXPENSES_DATA_KEY = 'expenses_data_key';
+const EXPENSES_DATA_KEY = 'expenses_data_key_v2';
 const sleep = ms => new Promise(r => setTimeout(r , ms))
 
 export async function getExpensesFromBackend() {

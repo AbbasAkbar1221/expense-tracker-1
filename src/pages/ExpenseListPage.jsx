@@ -2,21 +2,22 @@ import React from 'react';
 import ExpenseList from '../components/ExpenseList';
 import { useNavigate } from 'react-router-dom';
 import { useExpenseContext } from '../context/ExpenseContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteExpense, selectAllExpenses } from '../slice/expenseSlice';
 
 const ExpenseListPage = () => {
-    const { expense, dispatch, setEditIndex } = useExpenseContext();
+    const { setEditId } = useExpenseContext();
+    const expenses = useSelector(selectAllExpenses)
+    const dispatch = useDispatch()
     const navigate = useNavigate();
-    const expenses = expense;
 
-    const handleDeleteExpense = (ind) => {
-        dispatch({
-            type:"DELETE",
-            payload:ind
-        })
+    const handleDeleteExpense = (id) => {
+        dispatch(deleteExpense({id}))
     };
 
-    const handleEditExpense = (ind) => {
-        setEditIndex(ind);
+    const handleEditExpense = (id) => {
+        setEditId(id);
+        // setEditIndex(ind);
         navigate('/');
     };
 

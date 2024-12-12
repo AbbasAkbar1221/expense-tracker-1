@@ -10,6 +10,8 @@ import {
   TagsInput,
 } from './Inputs';
 import { useExpenseContext } from '../context/ExpenseContext';
+import { useSelector } from 'react-redux';
+import { selectAllExpenses } from '../slice/expenseSlice';
 
 const emptyForm = () => ({
   date: new Date().toISOString().split('T')[0],
@@ -23,9 +25,10 @@ const emptyForm = () => ({
   tags: '',
 });
 
-function formValuesFromLocalStorage(ind, storage) {
+function formValuesFromLocalStorage(id, storage) {
   const expenses = storage;
-  const expense = expenses[ind];
+  // const expense = expenses[ind]
+  const expense = expenses.find((expense) => expense.id===id)
   const formValues = {
     ...expense,
     newCategory: '',
@@ -35,9 +38,10 @@ function formValuesFromLocalStorage(ind, storage) {
 }
 
 const ExpenseForm = ({ onSaveExpense }) => {
-  const { expense, editIndex } = useExpenseContext();
+  const { editId } = useExpenseContext();
+  const expense = useSelector(selectAllExpenses)
   const prefilledForm =
-    editIndex > -1 ? formValuesFromLocalStorage(editIndex, expense) : emptyForm();
+    editId > -1 ? formValuesFromLocalStorage(editId, expense) : emptyForm();
   const [formValues, setFormValues] = useState(prefilledForm);
 
   const handleSubmit = (e) => {
@@ -49,7 +53,7 @@ const ExpenseForm = ({ onSaveExpense }) => {
       newCategory: undefined,
       tags: formValues.tags?.split(','),
     };
-    onSaveExpense(expense, editIndex);
+    onSaveExpense(expense, editId);
     setFormValues(emptyForm());
   };
 
@@ -63,7 +67,7 @@ const ExpenseForm = ({ onSaveExpense }) => {
   const [beneficiary, setBeneficiary] = [formValues.beneficiary, (val) => setFormValues((state) => ({ ...state, beneficiary: val }))];
   const [tags, setTags] = [formValues.tags, (val) => setFormValues((state) => ({ ...state, tags: val }))];
 
-  const submitButtonText = editIndex > -1 ? 'Edit Expense' : 'Add Expense';
+  const submitButtonText = editId > -1 ? 'Edit Expense' : 'Add Expense';
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 p-6 bg-white rounded-lg shadow-lg">
