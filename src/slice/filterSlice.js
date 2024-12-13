@@ -5,8 +5,7 @@ const filterSlice = createSlice({
   initialState: {
     categoryArray: ["All"],
     reverse: false,
-    sort: {
-    }
+    sortKey: null,
   },
   reducers: {
     setCategory(state, action) {
@@ -26,8 +25,14 @@ const filterSlice = createSlice({
       },
       reverseExpense(state, action){
        state.reverse = !state.reverse
+      },
+      setSortKey(state, action){
+        const {key} = action.payload
+        state.sortKey=key
       }
   },
 });
-export const { setCategory, reverseExpense } = filterSlice.actions;
+export const { setCategory, reverseExpense, setSortKey } = filterSlice.actions;
 export default filterSlice.reducer;
+
+export const sortArray = ["amount", "date", "title", "category"]

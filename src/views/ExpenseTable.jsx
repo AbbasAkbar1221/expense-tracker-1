@@ -1,7 +1,8 @@
 import React from 'react'
 
-const ExpenseTable = ({reverse, expenses, onDeleteExpense, onEditExpense }) => {
-  const viewExpense = reverse? [...expenses].reverse() : expenses
+const ExpenseTable = ({  expenses, onDeleteExpense, onEditExpense }) => {
+  // const viewExpense = reverse? [...expenses].reverse() : expenses
+  const viewExpense = expenses
   return (
     <>
    

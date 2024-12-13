@@ -1,7 +1,8 @@
 import React from 'react'
 
-const ExpenseCard = ({reverse, expenses, onDeleteExpense, onEditExpense}) => {
-  const viewExpense = reverse? [...expenses].reverse() : expenses
+const ExpenseCard = ({ expenses, onDeleteExpense, onEditExpense}) => {
+  // const viewExpense = reverse? [...expenses].reverse() : expenses
+  const viewExpense = expenses
   return (
     <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {/* {expenses.map((expense, index) => ( */}
